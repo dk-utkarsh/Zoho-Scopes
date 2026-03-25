@@ -435,14 +435,16 @@ export default function Home() {
                               {scope.useCase}
                             </p>
                           </button>
-                          <button
+                          <Button
+                            variant="outline"
+                            size="sm"
                             onClick={() => copyToClipboard(scope.scope)}
-                            className="mt-2 text-[10px] text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+                            className="mt-3 w-full text-xs font-medium"
                           >
                             {copiedText === scope.scope
                               ? "Copied!"
-                              : "Copy scope"}
-                          </button>
+                              : "Copy Scope"}
+                          </Button>
                         </div>
                       </GlowCard>
                     );
