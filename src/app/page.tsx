@@ -30,6 +30,26 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { GlowCard } from "@/components/ui/spotlight-card";
+
+const PRODUCT_GLOW_MAP: Record<string, "blue" | "purple" | "green" | "red" | "orange"> = {
+  books: "green",
+  cliq: "orange",
+  analytics: "purple",
+  mail: "blue",
+  salesiq: "orange",
+  crm: "red",
+  desk: "blue",
+  people: "green",
+  projects: "purple",
+  inventory: "orange",
+  creator: "purple",
+  sign: "blue",
+  subscriptions: "green",
+  recruit: "green",
+  campaigns: "red",
+  workdrive: "blue",
+};
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -138,9 +158,17 @@ export default function Home() {
     : "";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-[#faf9f7] overflow-hidden">
+      {/* Soft pastel blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-blue-200/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] rounded-full bg-purple-200/30 blur-3xl" />
+        <div className="absolute -bottom-40 left-1/4 w-[500px] h-[500px] rounded-full bg-pink-200/30 blur-3xl" />
+        <div className="absolute top-2/3 right-1/4 w-[400px] h-[400px] rounded-full bg-green-200/25 blur-3xl" />
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b border-gray-200/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Image
@@ -152,11 +180,9 @@ export default function Home() {
             />
             <div>
               <h1 className="text-lg font-semibold tracking-tight">
-                Zoho API Scope Reference
+                Zoho Token Scopes
               </h1>
-              <p className="text-xs text-muted-foreground">
-                by Dentalkart
-              </p>
+              <p className="text-xs text-muted-foreground">by Dentalkart</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -170,11 +196,10 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         {/* Domain Selector + Search + Filter */}
         <div className="mb-6 space-y-4">
           <div className="grid gap-4 sm:grid-cols-3">
-            {/* Domain */}
             <div>
               <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
                 Zoho Domain
@@ -191,8 +216,6 @@ export default function Home() {
                 ))}
               </select>
             </div>
-
-            {/* Search */}
             <div>
               <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
                 Search Scopes
@@ -205,8 +228,6 @@ export default function Home() {
                 className="h-10"
               />
             </div>
-
-            {/* Filter by Type */}
             <div>
               <label className="mb-1.5 block text-sm font-medium text-muted-foreground">
                 Filter by Type
@@ -229,7 +250,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Type Legend */}
           <div className="flex flex-wrap gap-2">
             <span className="text-xs text-muted-foreground mr-1 self-center">
               Scope Types:
@@ -252,7 +272,7 @@ export default function Home() {
 
         {/* Selected Scopes Output */}
         {selectedScopes.size > 0 && (
-          <Card className="mb-6 border-primary/30 bg-primary/5">
+          <Card className="mb-6 border-emerald-300 bg-emerald-50/80 backdrop-blur-sm shadow-sm">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">
@@ -262,9 +282,7 @@ export default function Home() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() =>
-                      copyToClipboard(selectedScopesString)
-                    }
+                    onClick={() => copyToClipboard(selectedScopesString)}
                   >
                     {copiedText === selectedScopesString
                       ? "Copied!"
@@ -275,9 +293,7 @@ export default function Home() {
                     size="sm"
                     onClick={() => copyToClipboard(scopeUrl)}
                   >
-                    {copiedText === scopeUrl
-                      ? "Copied!"
-                      : "Copy Auth URL"}
+                    {copiedText === scopeUrl ? "Copied!" : "Copy Auth URL"}
                   </Button>
                   <Button
                     variant="destructive"
@@ -328,9 +344,9 @@ export default function Home() {
           {filteredProducts.map((product) => (
             <AccordionItem
               key={product.id}
-              className="rounded-lg border border-border bg-card"
+              className="rounded-lg border border-gray-200 bg-white/60 backdrop-blur-sm shadow-sm"
             >
-              <AccordionTrigger className="px-4 py-3 hover:no-underline [&[data-state=open]]:border-b [&[data-state=open]]:border-border">
+              <AccordionTrigger className="px-4 py-3 hover:no-underline">
                 <div className="flex w-full items-center justify-between pr-2">
                   <div className="flex items-center gap-3">
                     <div
@@ -353,7 +369,6 @@ export default function Home() {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-4 pb-4 pt-3">
-                {/* Select All Toggle */}
                 <div className="mb-4 flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
                     Select all scopes in {product.name}
@@ -367,64 +382,69 @@ export default function Home() {
                     }
                   />
                 </div>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {product.scopes.map((rawScope) => {
                     const scope = getScope(rawScope);
                     const isSelected = selectedScopes.has(scope.scope);
                     return (
-                      <div
+                      <GlowCard
                         key={scope.id}
-                        className={`group relative rounded-lg border p-3 transition-all ${
+                        glowColor={PRODUCT_GLOW_MAP[product.id] || "blue"}
+                        className={`group p-3 transition-all ${
                           isSelected
-                            ? "border-primary/50 bg-primary/5"
-                            : "border-border hover:border-muted-foreground/30"
+                            ? "ring-1 ring-primary/40"
+                            : ""
                         }`}
                       >
-                        <div className="mb-2 flex items-start justify-between gap-2">
-                          <div className="flex items-center gap-2">
-                            <Switch
-                              checked={isSelected}
-                              onCheckedChange={() => toggleScope(scope.scope)}
-                              className="scale-75"
-                            />
-                            <Badge
-                              variant="outline"
-                              className={`text-[10px] ${SCOPE_TYPE_COLORS[scope.type]}`}
+                        <div className="relative z-10">
+                          <div className="mb-2 flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <Switch
+                                checked={isSelected}
+                                onCheckedChange={() =>
+                                  toggleScope(scope.scope)
+                                }
+                                className="scale-75"
+                              />
+                              <Badge
+                                variant="outline"
+                                className={`text-[10px] ${SCOPE_TYPE_COLORS[scope.type]}`}
+                              >
+                                {scope.type}
+                              </Badge>
+                            </div>
+                            <button
+                              onClick={() => openEdit(product, rawScope)}
+                              className="text-xs text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+                              title="Edit scope details"
                             >
-                              {scope.type}
-                            </Badge>
+                              Edit
+                            </button>
                           </div>
                           <button
-                            onClick={() => openEdit(product, rawScope)}
-                            className="text-xs text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
-                            title="Edit scope details"
+                            onClick={() => toggleScope(scope.scope)}
+                            className="w-full text-left"
                           >
-                            Edit
+                            <p className="mb-1 font-mono text-xs font-medium text-foreground break-all">
+                              {scope.scope}
+                            </p>
+                            <p className="text-xs font-medium text-muted-foreground">
+                              {scope.description}
+                            </p>
+                            <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground/70">
+                              {scope.useCase}
+                            </p>
+                          </button>
+                          <button
+                            onClick={() => copyToClipboard(scope.scope)}
+                            className="mt-2 text-[10px] text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+                          >
+                            {copiedText === scope.scope
+                              ? "Copied!"
+                              : "Copy scope"}
                           </button>
                         </div>
-                        <button
-                          onClick={() => toggleScope(scope.scope)}
-                          className="w-full text-left"
-                        >
-                          <p className="mb-1 font-mono text-xs font-medium text-foreground break-all">
-                            {scope.scope}
-                          </p>
-                          <p className="text-xs font-medium text-muted-foreground">
-                            {scope.description}
-                          </p>
-                          <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground/70">
-                            {scope.useCase}
-                          </p>
-                        </button>
-                        <button
-                          onClick={() => copyToClipboard(scope.scope)}
-                          className="mt-2 text-[10px] text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
-                        >
-                          {copiedText === scope.scope
-                            ? "Copied!"
-                            : "Copy scope"}
-                        </button>
-                      </div>
+                      </GlowCard>
                     );
                   })}
                 </div>
@@ -447,7 +467,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-12 border-t border-border py-6 text-center">
           <p className="text-xs text-muted-foreground">
-            Zoho API Scope Reference - Built for Dentalkart | Domain:{" "}
+            Zoho Token Scopes - Built for Dentalkart | Domain:{" "}
             <span className="font-mono">{selectedDomain}</span>
           </p>
           <p className="mt-1 text-xs text-muted-foreground/60">
